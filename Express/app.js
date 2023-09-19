@@ -5,6 +5,8 @@ const express = require('express');
 
 const app = express();
 
+const adminRoutes = require('./routes/admin')
+const shopRoutes = require('./routes/shop')
 // app.use('/',(req,res,next)=>{
 //     // req,res are same with extra features
 //     // next is a function is passing with use argument
@@ -22,30 +24,16 @@ const app = express();
 
 
 // body-parser
-
 app.use(bodyParser.urlencoded({extended: true}))
 
 // routings
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
 
-app.use('/',(req,res,next)=>{
-    // console.log('This always works')
-    next();
-})
 
-app.use('/add-product',(req,res,next)=>{
-    // console.log('In the middleware!')
-    res.send('<form action="/product" method="POST"><input type="text" name="title"/><input type="number" name="size"/><button type="submit">Add Product</button></form>');
-})
-
-app.use('/product',(req,res,next)=>{
-    console.log(req.body)
-    res.redirect('/');
-})
-
-// get request only
-app.use('/',(req,res,next)=>{
-    // console.log('In the middleware!')
-    res.send("<h1>Hello from Express!</h1>")
+// errors
+app.use((req,res,next)=>{
+    res.status(404).send('<h1>Page Not found</h1>')
 })
 
 app.listen(3000)
